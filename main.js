@@ -43,5 +43,49 @@ function makeCardFromStudent(student)
 etudiants.forEach((etudiant)=>{
     divEtudiants.innerHTML += makeCardFromStudent(etudiant)
 })
+const h3Blague = document.querySelector('.blague')
+//promise
+fetch("https://api.chucknorris.io/jokes/random")
+
+    .then(laReponseEnJson=>laReponseEnJson.json())
+
+    .then((laReponseDeserialisee)=>{
+        console.log(laReponseDeserialisee.value)
+        h3Blague.innerHTML = laReponseDeserialisee.value
+    })
 
 
+async function renvoieCoucou()
+{
+    let coucou = "coucou"
+    return coucou
+}
+
+let resultat
+
+renvoieCoucou().then(
+    ceQueMeRenvoieCoucou =>{
+        console.log(ceQueMeRenvoieCoucou)
+        resultat = ceQueMeRenvoieCoucou
+    }
+)
+
+const boutonChuck = document.querySelector('.boutonChuck')
+const texteBlague = document.querySelector('.chuck')
+
+async function vaChercherUneBlagueSurChuckNorris()
+{
+   return await fetch("https://api.chucknorris.io/jokes/random")
+        .then(response=>response.json())
+        .then(data=>{
+            return data
+        })
+}
+
+boutonChuck.addEventListener("click",()=>{
+    vaChercherUneBlagueSurChuckNorris().then(data=> {
+        console.log(data.value)
+        let template = `<h3>${data.value}</h3>`
+        texteBlague.innerHTML += template;
+    })
+})
