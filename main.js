@@ -121,3 +121,46 @@ fetch("https://api.github.com/users/natanbinisti")
 .then(data=>{
     document.querySelector('.natan').src = data.avatar_url
 })
+
+const divButtons = document.querySelector('.boutonsCategories')
+
+fetch("https://api.chucknorris.io/jokes/categories")
+.then(response=>response.json())
+.then(data=> {
+
+    data.forEach((category)=>{
+        console.log(category)
+        let templateButton = `
+        <button class="btn btn-primary boutonCategorie" id="${category}">${category}</button>
+        `
+
+        divButtons.innerHTML += templateButton
+
+
+
+    })
+
+   let boutons = document.querySelectorAll('.boutonCategorie')
+
+    boutons.forEach((bouton)=>{
+
+        bouton.addEventListener("click", ()=>{
+
+            fetch(`https://api.chucknorris.io/jokes/random?category=${bouton.id}`)
+                .then(response=>response.json())
+                .then(data =>{
+                    let template = `<h3>${data.value}</h3>`
+                    texteBlague.innerHTML += template;
+                })
+
+        })
+
+    })
+
+})
+
+console.log('---------------------')
+
+fetch("https://api.chucknorris.io/jokes/random?category=animal")
+.then(response=>response.json())
+.then(data=>console.log(data.value))
