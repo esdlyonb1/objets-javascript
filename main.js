@@ -4,19 +4,25 @@ const etudiants = [
         name : "pierre",
         age : 19,
         platPrefere : "pizza",
-        booleenPrefere : true
+        booleenPrefere : true,
+        github:"Pierrot69280",
+        avatar: "avatar.png"
     },
     {
         name : "Mei",
         age : 17,
         platPrefere : "boeuf bourguignon",
-        booleenPrefere : false
+        booleenPrefere : false,
+        avatar: "avatar.png",
+        github:"MeyDetour"
     },
     {
         name : "Natan",
         age : 19,
         platPrefere : "pates à la bolognaise",
-        booleenPrefere : false
+        booleenPrefere : false,
+        avatar: "avatar.png",
+        github: "natanbinisti"
     }
 ]
 
@@ -27,7 +33,7 @@ function makeCardFromStudent(student)
 
     let cardTemplate = `
 <div class="card" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
+  <img src="${student.avatar}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">${student.name}</h5>
     <p class="card-text">Age : ${student.age}</p>
@@ -40,9 +46,29 @@ function makeCardFromStudent(student)
 
 }
 
+
+
 etudiants.forEach((etudiant)=>{
-    divEtudiants.innerHTML += makeCardFromStudent(etudiant)
+
+    replaceAvatar(etudiant).then(etudiant=>{
+        divEtudiants.innerHTML += makeCardFromStudent(etudiant)
+    })
+
 })
+
+async function replaceAvatar(etudiant){
+    let pseudo = etudiant.github
+    let url = `https://api.github.com/users/${pseudo}`
+  return await  fetch(url)
+        .then(response=>response.json())
+        .then(profilGithub=>{
+            etudiant.avatar = profilGithub.avatar_url
+            return etudiant
+        })
+}
+
+
+
 const h3Blague = document.querySelector('.blague')
 //promise
 fetch("https://api.chucknorris.io/jokes/random")
@@ -88,4 +114,10 @@ boutonChuck.addEventListener("click",()=>{
         let template = `<h3>${data.value}</h3>`
         texteBlague.innerHTML += template;
     })
+})
+
+fetch("https://api.github.com/users/natanbinisti")
+.then(response=>response.json())
+.then(data=>{
+    document.querySelector('.natan').src = data.avatar_url
 })
